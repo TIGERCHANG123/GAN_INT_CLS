@@ -96,8 +96,8 @@ class draw:
   def save_created_pic(self, generator, pic_num, noise_dim, epoch, text_generator, text_decoder):
     text = text_generator(pic_num)
     sentence = []
-    for t in text:
-      s = text_decoder(t)
+    for i in range(text.shape[0]):
+      s = text_decoder(text[i])
       s = s.split(' ')
       s = '_'.join(s)
       sentence.append(s)
