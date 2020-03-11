@@ -48,11 +48,11 @@ class oxford_102_flowers_dataset():
         for name in self.file_list:
           img = cv2.imread('{}/{}'.format(self.file_path, name), 1)
           if not img is None:
-            index=int(name.split('_')[1].split('.')[0])
+            index=int(name.split('_')[1].split('.')[0])-1
             img = cv2.resize(img, (self.image_width, self.image_width), interpolation=cv2.INTER_AREA)
             b, g, r = cv2.split(img)
             img = cv2.merge([r, g, b])
-            print('index: {}, len sentences: {}'.format(index, len(self.index_sentences)))
+            # print('index: {}, len sentences: {}'.format(index, len(self.index_sentences)))
             n = np.random.randint(len(self.index_sentences[index]))
             text = self.index_sentences[index][n]
             text_code = np.zeros((self.max_seq_length,), dtype='float32')
