@@ -7,7 +7,7 @@ import re
 class oxford_102_flowers_dataset():
     def __init__(self, root, batch_size):
         self.file_path = root + '/datasets/oxford_102_flowers/jpg'
-        self.image_width = 128
+        self.image_width = 64
         self.batch_size = batch_size
         self.file_list = os.listdir(self.file_path)
         self.total_pic_num = len(self.file_list)

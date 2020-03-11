@@ -7,7 +7,7 @@ class generator(tf.keras.Model):
     self.input_layer = generator_Input(shape=[4, 4, 1024])
 
     self.middle_layer_list = [
-      generator_Middle(filters=1024, strides=2, padding='same'),  # 1024*4*4
+      # generator_Middle(filters=1024, strides=2, padding='same'),  # 1024*4*4
       generator_Middle(filters=512, strides=2, padding='same'),#1024*4*4
       generator_Middle(filters=256, strides=2, padding='same'),#512*8*8
       generator_Middle(filters=128, strides=2, padding='same'),#256*16*16
