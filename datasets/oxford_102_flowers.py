@@ -69,13 +69,17 @@ class oxford_102_flowers_dataset():
         train = train.map(self.parse).shuffle(1000).batch(self.batch_size)
         return train
     def get_random_text(self):
-        index = np.random.randint(len(self.file_list))
-        n = np.random.randint(len(self.index_sentences[index]))
-        text = self.index_sentences[index][n]
-        text_code = np.zeros((self.max_seq_length,), dtype='float32')
-        for i, token in enumerate(text.split(' ')):
-            text_code[i]=self.token_index[token]
-        return text_code
+        text_list = []
+        for i in range(self.batch_size):
+            index = np.random.randint(len(self.file_list))
+            n = np.random.randint(len(self.index_sentences[index]))
+            text = self.index_sentences[index][n]
+            text_code = np.zeros((self.max_seq_length,), dtype='float32')
+            for i, token in enumerate(text.split(' ')):
+                text_code[i]=self.token_index[token]
+            text_list.append(text_code)
+        text_list = np.asarray(text_list)
+        return text_list
     def text_decoder(self, code):
         s = []
         for c in code:
