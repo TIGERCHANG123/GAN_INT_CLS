@@ -22,8 +22,8 @@ def main(continue_train, train_time, train_epoch):
     noise_dim = 100
     batch_size = 64
 
-    generator_model, discriminator_model, model_name = get_gan(noise_dim)
     dataset = oxford_102_flowers_dataset(dataset_root,batch_size = batch_size)
+    generator_model, discriminator_model, model_name = get_gan(dataset.num_tokens)
     model_dataset = model_name + '-' + dataset.name
 
     train_dataset = dataset.get_train_dataset()
@@ -46,12 +46,12 @@ def main(continue_train, train_time, train_epoch):
               optimizers=[generator_optimizer, discriminator_optimizer], metrics=[gen_loss, disc_loss], noise_dim=noise_dim, gp=20)
 
     for epoch in range(train_epoch):
-        train.train(epoch=epoch, pic=pic)
+        train.train(epoch=epoch, pic=pic, text_generator=dataset.get_random_text)
         pic.show()
         if (epoch + 1) % 5 == 0:
             ckpt_manager.save()
-        pic.save_created_pic(generator_model, 8, noise_dim, epoch)
-    pic.show_created_pic(generator_model, 8, noise_dim)
+        pic.save_created_pic(generator_model, 8, noise_dim, epoch, dataset.get_random_text, dataset.text_decoder)
+    pic.show_created_pic(generator_model, 8, noise_dim, dataset.get_random_text, dataset.text_decoder)
 
     # # fid score
     # gen = generator_model

@@ -43,6 +43,7 @@ class oxford_102_flowers_dataset():
         characters = sorted(list(characters))
         self.token_index = dict(
                     [(char, i) for i, char in enumerate(characters)])
+        self.index_token = characters
     def generator(self):
         for name in self.file_list:
           img = cv2.imread('{}/{}'.format(self.file_path, name), 1)
@@ -75,7 +76,12 @@ class oxford_102_flowers_dataset():
         for i, token in enumerate(text.split(' ')):
             text_code[i]=self.token_index[token]
         return text_code
-
+    def text_decoder(self, code):
+        s = []
+        for c in code:
+            s.append(self.index_token[c])
+        s = ' '.join(s)
+        return s
 class noise_generator():
     def __init__(self, noise_dim, digit_dim, batch_size, iter_num):
         self.noise_dim = noise_dim

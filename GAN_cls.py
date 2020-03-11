@@ -1,9 +1,9 @@
 from GAN_cls_Block import *
 
 class generator(tf.keras.Model):
-  def __init__(self, tokens):
+  def __init__(self, num_tokens):
     super(generator, self).__init__()
-    self.encoder = Encoder(num_encoder_tokens=tokens, latent_dim=128, embedding_dim=256)
+    self.encoder = Encoder(num_encoder_tokens=num_tokens, latent_dim=128, embedding_dim=256)
     self.input_layer = generator_Input(shape=[4, 4, 1024])
 
     self.middle_layer_list = [
@@ -43,8 +43,8 @@ class discriminator(tf.keras.Model):
     x = self.output_layer(x)
     return x
 
-def get_gan(noise_dim):
-  Generator = generator(noise_dim)
+def get_gan(num_tokens):
+  Generator = generator(num_tokens)
   Discriminator = discriminator()
   gen_name = 'WGAN'
   return Generator, Discriminator, gen_name
