@@ -69,9 +69,9 @@ class oxford_102_flowers_dataset():
         train = tf.data.Dataset.from_generator(self.generator, output_types=(tf.int64, tf.float32))
         train = train.map(self.parse).shuffle(1000).batch(self.batch_size)
         return train
-    def get_random_text(self):
+    def get_random_text(self, batch_size):
         text_list = []
-        for i in range(self.batch_size):
+        for i in range(batch_size):
             index = np.random.randint(len(self.file_list))
             n = np.random.randint(len(self.index_sentences[index]))
             text = self.index_sentences[index][n]

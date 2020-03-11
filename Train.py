@@ -53,7 +53,7 @@ class train_one_epoch():
             generated_images = self.generator(text, noise, training=True)
             real_output = self.discriminator(text, images, training=True)
             fake_output1 = self.discriminator(text, generated_images, training=True)
-            fake_text = text_generator()
+            fake_text = text_generator(images.shape[0])
             fake_output2 = self.discriminator(fake_text, images, training=True)
 
             disc_loss, real_loss, fake_loss1, fake_loss2 = self.discriminator_loss(real_output, fake_output1, fake_output2)
