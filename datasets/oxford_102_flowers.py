@@ -110,11 +110,3 @@ class noise_generator():
         auxi_dict = tf.one_hot(auxi_dict, depth=self.digit_dim)
         auxi_dict = tf.cast(auxi_dict, tf.float32)
         return noise, auxi_dict
-
-root = '/home/tigerc'
-dataset = oxford_102_flowers_dataset(root, 128).get_train_dataset()
-data = next(iter(dataset))[0]
-
-image = data[0]
-image = tf.squeeze(image)
-plt.imshow(image)

@@ -8,6 +8,7 @@ class Encoder(tf.keras.Model):
         super(Encoder, self).__init__()
         self.enc_units = latent_dim
         self.embedding = layers.Embedding(num_encoder_tokens, embedding_dim)
+        self.flatten = layers.Flatten()
         # self.gru = layers.GRU(self.enc_units,
         #                                return_sequences=True,
         #                                return_state=True,
@@ -17,6 +18,7 @@ class Encoder(tf.keras.Model):
 
     def call(self, x):
         x=self.embedding(x)
+        x = self.flatten(x)
         x = self.dense(x)
         x = self.leakyRelu(x)
         return x

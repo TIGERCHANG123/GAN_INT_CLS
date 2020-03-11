@@ -23,8 +23,9 @@ class generator(tf.keras.Model):
     return x
 
 class discriminator(tf.keras.Model):
-  def __init__(self):
+  def __init__(self, num_tokens):
     super(discriminator, self).__init__()
+    self.encoder = Encoder(num_encoder_tokens=num_tokens, latent_dim=128, embedding_dim=256)
     self.input_layer = discriminator_Input(filters=128, strides=1)
     self.middle_layer_list = [
       discriminator_Middle(filters=256, strides=2, padding='valid'),
@@ -34,8 +35,13 @@ class discriminator(tf.keras.Model):
     self.output_layer = discriminator_Output(with_activation=False)
 
   def call(self, text, x):
-    ones = tf.ones(shape=[1, x.shape[1], x.shape[2]], dtype=x.dtype)
-    text = ones*text
+    code = self.encoder(text)
+    code = tf.expand_dims(code, axis=1)
+    code = tf.expand_dims(code, axis=2)
+    ones = tf.ones(shape=[1, x.shape[1], x.shape[2], 1], dtype=x.dtype)
+    print('code shape: {}'.format(code.shape))
+    print('one shape: {}'.format(ones.shape))
+    text = ones*code
     x = tf.concat([x, text], axis=-1)
     x = self.input_layer(x)
     for i in range(len(self.middle_layer_list)):
@@ -45,7 +51,7 @@ class discriminator(tf.keras.Model):
 
 def get_gan(num_tokens):
   Generator = generator(num_tokens)
-  Discriminator = discriminator()
+  Discriminator = discriminator(num_tokens)
   gen_name = 'WGAN'
   return Generator, Discriminator, gen_name
 
