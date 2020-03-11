@@ -95,13 +95,16 @@ class draw:
 
   def save_created_pic(self, generator, pic_num, noise_dim, epoch, text_generator, text_decoder):
     text = text_generator(pic_num)
-    sentence = text_decoder(text)
-    sentence = sentence.split(' ')
-    sentence = '_'.join(sentence)
+    sentence = []
+    for t in text:
+      s = text_decoder(t)
+      s = s.split(' ')
+      s = '_'.join(s)
+      sentence.append(s)
     x = tf.convert_to_tensor(text, np.random.rand(pic_num, noise_dim))
     y = generator(x)
     y=tf.squeeze(y)
     y = (y + 1) / 2
     for i in range(pic_num):
-      plt.imsave(self.generated_pic_path+'/{}_{}_{}_{}.png'.format(self.train_time, epoch, i, sentence), y[i].numpy())
+      plt.imsave(self.generated_pic_path+'/{}_{}_{}_{}.png'.format(self.train_time, epoch, i, sentence[i]), y[i].numpy())
     return
