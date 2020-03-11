@@ -94,7 +94,7 @@ class draw:
     return
 
   def save_created_pic(self, generator, pic_num, noise_dim, epoch, text_generator, text_decoder):
-    text = text_generator()
+    text = text_generator(pic_num)
     sentence = text_decoder(text)
     sentence = sentence.split(' ')
     sentence = '_'.join(sentence)
