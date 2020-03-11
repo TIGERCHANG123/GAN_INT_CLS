@@ -35,12 +35,11 @@ class discriminator(tf.keras.Model):
     self.output_layer = discriminator_Output(with_activation=False)
 
   def call(self, text, x):
+    print('x shape: {}'.format(x.shape))
     code = self.encoder(text)
     code = tf.expand_dims(code, axis=1)
     code = tf.expand_dims(code, axis=2)
     ones = tf.ones(shape=[1, x.shape[1], x.shape[2], 1], dtype=x.dtype)
-    print('code shape: {}'.format(code.shape))
-    print('one shape: {}'.format(ones.shape))
     text = ones*code
     x = tf.concat([x, text], axis=-1)
     x = self.input_layer(x)
