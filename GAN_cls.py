@@ -7,6 +7,7 @@ class generator(tf.keras.Model):
     self.input_layer = generator_Input(shape=[4, 4, 1024])
 
     self.middle_layer_list = [
+      generator_Middle(filters=1024, strides=2, padding='same'),  # 1024*4*4
       generator_Middle(filters=512, strides=2, padding='same'),#1024*4*4
       generator_Middle(filters=256, strides=2, padding='same'),#512*8*8
       generator_Middle(filters=128, strides=2, padding='same'),#256*16*16
@@ -35,7 +36,6 @@ class discriminator(tf.keras.Model):
     self.output_layer = discriminator_Output(with_activation=False)
 
   def call(self, text, x):
-    print('x shape: {}'.format(x.shape))
     code = self.encoder(text)
     code = tf.expand_dims(code, axis=1)
     code = tf.expand_dims(code, axis=2)
