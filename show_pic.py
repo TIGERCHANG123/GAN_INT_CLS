@@ -101,8 +101,8 @@ class draw:
       s = s.split(' ')
       s = '_'.join(s)
       sentence.append(s)
-    x = tf.convert_to_tensor(text, np.random.rand(pic_num, noise_dim))
-    y = generator(x)
+    x = tf.convert_to_tensor(np.random.rand(pic_num, noise_dim))
+    y = generator(text, x)
     y=tf.squeeze(y)
     y = (y + 1) / 2
     for i in range(pic_num):
