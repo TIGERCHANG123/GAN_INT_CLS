@@ -86,7 +86,7 @@ class draw:
       s = s.split(' ')
       s = '_'.join(s)
       sentence.append(s)
-    x = tf.convert_to_tensor(np.random.rand(pic_num, noise_dim))
+    x = tf.convert_to_tensor(np.random.rand(pic_num, noise_dim), dtype=tf.float32)
     y = generator(text, x)
     for i in range(pic_num):
       plt.subplot(1, pic_num, i + 1)
