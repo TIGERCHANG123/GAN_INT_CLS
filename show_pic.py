@@ -78,7 +78,8 @@ class draw:
     plt.imshow(image)
     plt.show()
 
-  def show_created_pic(self, generator, pic_num, noise_dim, text_generator, text_decoder):
+  def show_created_pic(self, models, pic_num, noise_dim, text_generator, text_decoder):
+    generator, embedding = models
     text = text_generator(pic_num)
     sentence = []
     for i in range(text.shape[0]):
@@ -87,6 +88,7 @@ class draw:
       s = '_'.join(s)
       sentence.append(s)
     x = tf.convert_to_tensor(np.random.rand(pic_num, noise_dim), dtype=tf.float32)
+    text = embedding(text)
     y = generator(text, x)
     for i in range(pic_num):
       plt.subplot(1, pic_num, i + 1)
@@ -97,7 +99,8 @@ class draw:
     plt.show()
     return
 
-  def save_created_pic(self, generator, pic_num, noise_dim, epoch, text_generator, text_decoder):
+  def save_created_pic(self, models, pic_num, noise_dim, epoch, text_generator, text_decoder):
+    generator, embedding = models
     text = text_generator(pic_num)
     sentence = []
     for i in range(text.shape[0]):
@@ -108,6 +111,7 @@ class draw:
     x = tf.convert_to_tensor(np.random.rand(pic_num, noise_dim), dtype=tf.float32)
     # print('x type: {}'.format(x.dtype))
     # print('text type: {}'.format(text.dtype))
+    text = embedding(text)
     y = generator(text, x)
     y=tf.squeeze(y)
     y = (y + 1) / 2

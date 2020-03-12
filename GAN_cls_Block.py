@@ -4,10 +4,8 @@ from tensorflow.keras import layers
 from tensorflow.keras.initializers import *
 
 class Encoder(tf.keras.Model):
-    def __init__(self, num_encoder_tokens, latent_dim, embedding_dim):
+    def __init__(self, latent_dim):
         super(Encoder, self).__init__()
-        self.enc_units = latent_dim
-        self.embedding = layers.Embedding(num_encoder_tokens, embedding_dim)
         self.flatten = layers.Flatten()
         # self.gru = layers.GRU(self.enc_units,
         #                                return_sequences=True,
@@ -17,7 +15,6 @@ class Encoder(tf.keras.Model):
         self.leakyRelu = layers.LeakyReLU(alpha=0.2)
 
     def call(self, x):
-        x=self.embedding(x)
         x = self.flatten(x)
         x = self.dense(x)
         x = self.leakyRelu(x)

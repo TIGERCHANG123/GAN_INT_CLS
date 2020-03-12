@@ -23,7 +23,7 @@ def main(continue_train, train_time, train_epoch):
     batch_size = 64
 
     dataset = oxford_102_flowers_dataset(dataset_root,batch_size = batch_size)
-    generator_model, discriminator_model, model_name = get_gan(dataset.num_tokens)
+    generator_model, discriminator_model, embedding_model, model_name = get_gan(dataset.num_tokens)
     model_dataset = model_name + '-' + dataset.name
 
     train_dataset = dataset.get_train_dataset()
@@ -33,7 +33,7 @@ def main(continue_train, train_time, train_epoch):
 
     checkpoint_path = temp_root + '/temp_model_save/' + model_dataset
     ckpt = tf.train.Checkpoint(genetator_optimizers=generator_optimizer, discriminator_optimizer=discriminator_optimizer ,
-                               generator=generator_model, discriminator=discriminator_model)
+                               generator=generator_model, discriminator=discriminator_model, embedding=embedding_model)
     ckpt_manager = tf.train.CheckpointManager(ckpt, checkpoint_path, max_to_keep=5)
     if ckpt_manager.latest_checkpoint and continue_train:
         ckpt.restore(ckpt_manager.latest_checkpoint)
@@ -42,7 +42,7 @@ def main(continue_train, train_time, train_epoch):
     gen_loss = tf.keras.metrics.Mean(name='gen_loss')
     disc_loss = tf.keras.metrics.Mean(name='disc_loss')
 
-    train = train_one_epoch(model=[generator_model, discriminator_model], train_dataset=train_dataset,
+    train = train_one_epoch(model=[generator_model, discriminator_model, embedding_model], train_dataset=train_dataset,
               optimizers=[generator_optimizer, discriminator_optimizer], metrics=[gen_loss, disc_loss], noise_dim=noise_dim, gp=20)
 
     # pic.save_created_pic(generator_model, 8, noise_dim, 0, dataset.get_random_text, dataset.text_decoder)
@@ -52,8 +52,8 @@ def main(continue_train, train_time, train_epoch):
         pic.show()
         if (epoch + 1) % 5 == 0:
             ckpt_manager.save()
-        pic.save_created_pic(generator_model, 8, noise_dim, epoch, dataset.get_random_text, dataset.text_decoder)
-    pic.show_created_pic(generator_model, 8, noise_dim, dataset.get_random_text, dataset.text_decoder)
+        pic.save_created_pic([generator_model, embedding_model], 8, noise_dim, epoch, dataset.get_random_text, dataset.text_decoder)
+    pic.show_created_pic([generator_model, embedding_model], 8, noise_dim, dataset.get_random_text, dataset.text_decoder)
 
     # # fid score
     # gen = generator_model
