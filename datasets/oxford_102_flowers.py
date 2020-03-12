@@ -83,8 +83,8 @@ class oxford_102_flowers_dataset():
         return text_list
     def text_decoder(self, code):
         s = []
-        for c in code:
-            c = int(c)
+        for i in range(len(code)):
+            c = int(code[i])
             s.append(self.index_token[c])
         s = ' '.join(s)
         return s
