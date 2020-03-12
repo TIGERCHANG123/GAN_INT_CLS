@@ -105,7 +105,7 @@ class draw:
       s = s.split(' ')
       s = '_'.join(s)
       sentence.append(s)
-    x = tf.convert_to_tensor(np.random.rand(pic_num, noise_dim))
+    x = tf.convert_to_tensor(np.random.rand(pic_num, noise_dim), dtype=tf.float32)
     print('x type: {}'.format(x.dtype))
     print('text type: {}'.format(text.dtype))
     y = generator(text, x)
