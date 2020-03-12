@@ -71,7 +71,7 @@ class train_one_epoch():
         self.disc_loss.reset_states()
 
         for (batch, (image, text)) in enumerate(self.train_dataset):
-            noise = tf.random.normal([image.shape[0], self.noise_dim])
+            noise = tf.random.normal([image.shape[0], self.noise_dim], dtype=tf.float32)
             self.train_step(noise, image, text, text_generator)
             pic.add([self.gen_loss.result().numpy(), self.disc_loss.result().numpy()])
             pic.save()
