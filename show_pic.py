@@ -79,11 +79,15 @@ class draw:
     plt.show()
 
   def show_created_pic(self, generator, pic_num, noise_dim, text_generator, text_decoder):
-    text = text_generator()
-    sentence = text_decoder(text)
-    x = tf.convert_to_tensor(text, np.random.rand(pic_num, noise_dim))
-    y = generator(x)
-    # print(y.shape)
+    text = text_generator(pic_num)
+    sentence = []
+    for i in range(text.shape[0]):
+      s = text_decoder(text[i])
+      s = s.split(' ')
+      s = '_'.join(s)
+      sentence.append(s)
+    x = tf.convert_to_tensor(np.random.rand(pic_num, noise_dim))
+    y = generator(text, x)
     for i in range(pic_num):
       plt.subplot(1, pic_num, i + 1)
       y = (y + 1) / 2
