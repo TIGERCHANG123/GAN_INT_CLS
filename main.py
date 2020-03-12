@@ -45,7 +45,8 @@ def main(continue_train, train_time, train_epoch):
     train = train_one_epoch(model=[generator_model, discriminator_model], train_dataset=train_dataset,
               optimizers=[generator_optimizer, discriminator_optimizer], metrics=[gen_loss, disc_loss], noise_dim=noise_dim, gp=20)
 
-    pic.save_created_pic(generator_model, 8, noise_dim, 0, dataset.get_random_text, dataset.text_decoder)
+    # pic.save_created_pic(generator_model, 8, noise_dim, 0, dataset.get_random_text, dataset.text_decoder)
+    pic.show_created_pic(generator_model, 8, noise_dim, dataset.get_random_text, dataset.text_decoder)
     for epoch in range(train_epoch):
         train.train(epoch=epoch, pic=pic, text_generator=dataset.get_random_text)
         pic.show()
