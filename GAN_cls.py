@@ -36,10 +36,13 @@ class discriminator(tf.keras.Model):
     super(discriminator, self).__init__()
     self.encoder = Encoder(latent_dim=128)
     self.input_layer = discriminator_Input(filters=128, strides=1)
-    self.middle_layer_list = [
-      discriminator_Middle(filters=256, strides=2, padding='valid'),
-      discriminator_Middle(filters=512, strides=2, padding='valid'),
-      discriminator_Middle(filters=1024, strides=2, padding='valid'),
+    self.middle_layer_list1 = [
+      discriminator_Middle(kernel_size=5, filters=256, strides=2, padding='valid'),
+      discriminator_Middle(kernel_size=5, filters=512, strides=2, padding='valid'),
+    ]
+    self.middle_layer_list2 = [
+      discriminator_Middle(kernel_size=1, filters=1024, strides=2, padding='valid'),
+      discriminator_Middle(kernel_size=5, filters=1024, strides=2, padding='valid'),
     ]
     self.output_layer = discriminator_Output(with_activation=False)
 
@@ -51,12 +54,13 @@ class discriminator(tf.keras.Model):
     code = tf.expand_dims(code, axis=2)
 
     x = self.input_layer(x)
-    for i in range(len(self.middle_layer_list) - 1):
-      x = self.middle_layer_list[i](x)
+    for i in range(len(self.middle_layer_list1)):
+      x = self.middle_layer_list1[i](x)
     ones = tf.ones(shape=[1, x.shape[1], x.shape[2], 1], dtype=x.dtype)
     image_text = ones * code
     x = tf.concat([x, image_text], axis=-1)
-    x = self.middle_layer_list[-1](x)
+    for i in range(len(self.middle_layer_list2)):
+      x = self.middle_layer_list2[i](x)
     x = self.output_layer(x)
     return x
 

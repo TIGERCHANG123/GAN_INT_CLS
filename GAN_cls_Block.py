@@ -69,9 +69,9 @@ class discriminator_Input(tf.keras.Model):
     return x
 
 class discriminator_Middle(tf.keras.Model):
-  def __init__(self, filters, strides, padding):
+  def __init__(self, kernel_size, filters, strides, padding):
       super(discriminator_Middle, self).__init__()
-      self.conv = tf.keras.layers.Conv2D(filters, kernel_size=5, strides=strides, padding=padding, kernel_initializer=RandomNormal(stddev=0.02))
+      self.conv = tf.keras.layers.Conv2D(filters, kernel_size=kernel_size, strides=strides, padding=padding, kernel_initializer=RandomNormal(stddev=0.02))
       self.ln = tf.keras.layers.LayerNormalization()
       self.leakyRelu = tf.keras.layers.LeakyReLU(alpha=0.2)
       # self.dropout = tf.keras.layers.Dropout(0.3)
